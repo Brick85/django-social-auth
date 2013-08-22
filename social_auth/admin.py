@@ -8,6 +8,10 @@ if setting('SOCIAL_AUTH_MODELS') in (None, 'social_auth.db.django_models'):
 
     _User = UserSocialAuth.user_model()
 
+    if isinstance(_User, str):
+        from django.db.models.loading import get_model
+        _User = get_model(*_User.split('.', 1))
+
     if hasattr(_User, 'USERNAME_FIELD'):
         username_field = _User.USERNAME_FIELD
     elif hasattr(_User, 'username'):
